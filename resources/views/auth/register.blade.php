@@ -1,52 +1,96 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+@extends('layouts.guest')
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
+@section('content')
+<div class="card shadow">
+    <div class="card-header bg-primary text-white text-center">
+        <h4>Registro de Usuario</h4>
+    </div>
+    <div class="card-body">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
+            @csrf
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" name="name" class="form-control" required value="{{ old('name') }}">
+            </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+            <div class="mb-3">
+                <label class="form-label">Correo electrónico</label>
+                <input type="email" name="email" class="form-control" required value="{{ old('email') }}">
+            </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Contraseña</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+            <div class="mb-3">
+                <label class="form-label">Confirmar contraseña</label>
+                <input type="password" name="password_confirmation" class="form-control" required>
+            </div>
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+            <div class="mb-3">
+                <input type="hidden" name="role" value="cliente">
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+            </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
+            <!-- Campos adicionales -->
+            <div class="mb-3">
+                <label class="form-label">Documento</label>
+                <input type="text" name="documento" class="form-control" required value="{{ old('documento') }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Dirección</label>
+                <input type="text" name="direccion" class="form-control" required value="{{ old('direccion') }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Teléfono Personal</label>
+                <input type="text" name="telefono_personal" class="form-control" required value="{{ old('telefono_personal') }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Tipo de Sangre</label>
+                <select name="tipo_sangre" class="form-select" required>
+                    <option value="">Selecciona</option>
+                    @foreach (['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'] as $tipo)
+                        <option value="{{ $tipo }}" {{ old('tipo_sangre') === $tipo ? 'selected' : '' }}>{{ $tipo }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">EPS</label>
+                <input type="text" name="eps" class="form-control" required value="{{ old('eps') }}">
+            </div>
+            <div class="mb-3">
+               
+                <input type="hidden"  name="otra_eps" class="form-control" value="{{ old('otra_eps') }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Contacto de Emergencia</label>
+                <input type="text" name="contacto_emergencia" class="form-control" required value="{{ old('contacto_emergencia') }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Teléfono de Contacto de Emergencia</label>
+                <input type="text" name="telefono_contacto_emergencia" class="form-control" required value="{{ old('telefono_contacto_emergencia') }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Foto (opcional)</label>
+                <input type="file" name="foto" class="form-control" accept="image/*">
+            </div>
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success">Registrarse</button>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
